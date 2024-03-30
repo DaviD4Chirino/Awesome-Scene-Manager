@@ -54,13 +54,11 @@ _data = {
 "fade_out": SubResource("Animation_gfxy4")
 }
 
-[node name="SceneManager" type="CanvasLayer" node_paths=PackedStringArray("anim", "progress_bar_timer", "progress_bar")]
+[node name="SceneManager" type="CanvasLayer" node_paths=PackedStringArray("anim")]
 process_mode = 3
 follow_viewport_enabled = true
 script = ExtResource("1_xq8nf")
 anim = NodePath("AnimationPlayer")
-progress_bar_timer = NodePath("ProgressBarTimer")
-progress_bar = NodePath("Control/ColorRect/MarginContainer/ProgressBar")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -96,17 +94,10 @@ theme_override_constants/margin_bottom = 50
 
 [node name="ProgressBar" type="ProgressBar" parent="Control/ColorRect/MarginContainer"]
 layout_mode = 2
-size_flags_vertical = 4
+size_flags_vertical = 8
 mouse_filter = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_ba8gl")
 }
-
-[node name="ProgressBarTimer" type="Timer" parent="."]
-process_callback = 0
-wait_time = 1.5
-one_shot = true
-
-[connection signal="timeout" from="ProgressBarTimer" to="." method="_on_progress_bar_timer_timeout"]

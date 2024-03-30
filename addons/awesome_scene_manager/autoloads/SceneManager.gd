@@ -14,12 +14,9 @@ enum Transitions {
 	FADE
 }
 @export var default_transition_type: Transitions = Transitions.FADE
-@export_group("Nodes")
 
+@export_group("Nodes")
 @export var anim: AnimationPlayer
-@export var progress_bar_timer: Timer
-## Progress Bar will only show if the progress_bar_timer has stopped and the scene is no loaded yet
-@export var progress_bar: ProgressBar
 
 ## The resource path
 var scene_to_load: String = ""
@@ -27,27 +24,29 @@ var loading_resource: bool = false
 var progress: Array = []
 #Signals
 
-## Emitted when the animation_in just started playing
-signal changing_scenes
-## Emitted when the animation_out ended
+signal transitioning_in
+signal transitioning_out
 signal scene_changed
-## Emitted when the loading process has just begun
-signal loading_scene
+## Emitted every frame the resource is being loaded
+signal loading_scene(
+	## An array with a float from 0 to 1
+	progress: Array[float]
+	)
 ## Emitted when the loading has ended
 signal scene_loaded
 
 func _ready():
 	hide()
-	progress_bar.hide()
 
-func _process(delta: float):
+func _process(_delta: float):
 	if not loading_resource:
 		return
-	# print(ResourceLoader.load_threaded_get_status(scene_to_load, progress))
-	match ResourceLoader.load_threaded_get_status(scene_to_load, progress):
+
+	var thread_status = ResourceLoader.load_threaded_get_status(scene_to_load, progress)
+
+	match thread_status:
 		ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-			if progress_bar.visible:
-				progress_bar.value = progress[0] * 100
+			loading_scene.emit(progress)
 
 		ResourceLoader.THREAD_LOAD_LOADED:
 			scene_loaded.emit()
@@ -66,7 +65,7 @@ func change_scene(
 	scene_path: String,
 	## The initial transition type
 	trans_in: Transitions=Transitions.FADE,
-	## The ending transition type, if set to -1 will be the the ending of the fade_in transition, else use the Transitions 
+	## The ending transition type, if set to -1 will be the the ending of the fade_in transition, otherwise use the Transitions 
 	trans_out: int=- 1,
 	) -> void:
 
@@ -75,31 +74,39 @@ func change_scene(
 		return
 
 	show()
-
+	# if trans_out is -1 it means is the ending of trans_in,
+	# so we give it the same type
 	var out_transition: Transitions = trans_in if (
-		trans_out <= 0) else (
-			Transitions.keys()[trans_out]
+		trans_out == - 1) else (
+			Transitions.values()[trans_out]
 		)
+
 	scene_to_load = scene_path
 
-	await start_transition(trans_in)
-
+	# we start to load the scene
 	ResourceLoader.load_threaded_request(scene_to_load)
 	loading_resource = true
 
+	# if we do not want a transition we do no wait for it
+	if trans_in != Transitions.NONE:
+		await start_transition(trans_in)
+
+	# we change the scene after it loads
 	await scene_loaded
 	get_tree().change_scene_to_packed(
 		ResourceLoader.load_threaded_get(
 			scene_to_load
 		)
 	)
+	scene_changed.emit()
 
-	await end_transition(out_transition)
+	if out_transition != Transitions.NONE:
+		await end_transition(out_transition)
 
+	# after the whole process is done, we return to the initial position
 	hide()
 
 func start_transition(transition: Transitions) -> void:
-
 	var anim_name: String = _get_anim_name(transition) + "_in"
 
 	if not anim.has_animation(anim_name):
@@ -107,11 +114,9 @@ func start_transition(transition: Transitions) -> void:
 		anim_name = _parse_transition_name(default_transition_type) + "_in"
 
 	anim.play(anim_name)
-	changing_scenes.emit()
+	transitioning_in.emit()
 
 	await anim.animation_finished
-
-	progress_bar_timer.start()
 
 func end_transition(transition: Transitions) -> void:
 	var anim_name: String = _get_anim_name(transition) + "_out"
@@ -120,16 +125,13 @@ func end_transition(transition: Transitions) -> void:
 		push_warning("Theres no animation: %s" % anim_name)
 		anim_name = _parse_transition_name(default_transition_type) + "_out"
 
-	progress_bar_timer.stop()
-	progress_bar.hide()
-
 	anim.play(anim_name)
-	scene_changed.emit()
+	transitioning_out.emit()
 	await anim.animation_finished
 
-## returns the transition anim name if it exist, else the first element of the enum (fade)
+## returns the transition anim name if it exist, or the default transition type
 func _get_anim_name(transition: Transitions) -> String:
-	if Transitions.keys().find(transition) == - 1:
+	if Transitions.values().find(transition) == - 1:
 		push_warning(
 			"Transition type of %s does not exist" % transition
 			)
@@ -141,9 +143,3 @@ func _get_anim_name(transition: Transitions) -> String:
 
 func _parse_transition_name(transition: int) -> String:
 	return Transitions.keys()[transition].to_lower()
-
-# Connected Signals
-
-func _on_progress_bar_timer_timeout() -> void:
-	progress_bar.show()
-	pass # Replace with function body.

@@ -1,6 +1,2 @@
-res://addons/awesome_scene_manager/autoloads/SceneManager.gd
-res://scenes/scene2.tscn
-res://playground.tscn
-res://playground.gd
-res://scenes/scene2.gd
 res://addons/awesome_scene_manager/autoloads/SceneManager.tscn
+res://addons/awesome_scene_manager/autoloads/SceneManager.gd
