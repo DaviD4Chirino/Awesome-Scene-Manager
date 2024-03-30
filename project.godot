@@ -1,0 +1,33 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[addons]
+
+instance_dock/scene_data_file="res://InstanceDockSceneData.txt"
+instance_dock/preview_resolution=Vector2i(64, 64)
+
+[application]
+
+config/name="Scene Manager"
+config/features=PackedStringArray("4.2", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[dotnet]
+
+project/assembly_name="Scene Manager"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/InstanceDock/plugin.cfg", "res://addons/awesome_scene_manager/plugin.cfg", "res://addons/nv.file_system/plugin.cfg")
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
