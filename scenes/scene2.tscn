@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7xs1hutcr5kg"]
+
+[ext_resource type="Script" path="res://scenes/scene2.gd" id="1_kv6f2"]
+
+[node name="Scene2" type="Node2D"]
+script = ExtResource("1_kv6f2")
+
+[node name="Button" type="Button" parent="."]
+offset_right = 375.0
+offset_bottom = 176.0
+text = "Go to scene 1
+"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

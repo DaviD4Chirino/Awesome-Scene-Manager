@@ -16,8 +16,19 @@ instance_dock/preview_resolution=Vector2i(64, 64)
 [application]
 
 config/name="Scene Manager"
+run/main_scene="res://playground.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+SceneManager="*res://addons/awesome_scene_manager/autoloads/SceneManager.tscn"
+
+[display]
+
+window/size/viewport_width=800
+window/size/viewport_height=600
+window/stretch/mode="canvas_items"
 
 [dotnet]
 

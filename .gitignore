@@ -17,4 +17,5 @@ data_*/
 
 /.autosave
 /.tmp
-.godot/
+.godot/*
+*.cfg
