@@ -49,7 +49,6 @@ func _on_http_request_request_completed(result: int, response_code: int, headers
 			var version: String=release.tag_name
 
 			return _version_to_number(version) > _version_to_number(current_version))
-
 	if versions.size() > 0:
 		download_update_panel.next_version_release = versions[0]
 		download_update_panel.addon_name = addon_name
@@ -83,6 +82,7 @@ func _version_to_number(version: String) -> int:
 	return version.replace(".", "").to_int()
 
 func _connect_signals():
+	print("connecting")
 	pressed.connect(_on_pressed)
 	http_request.request_completed.connect(_on_http_request_request_completed)
 	download_update_panel.failed.connect(_on_download_update_failed)
