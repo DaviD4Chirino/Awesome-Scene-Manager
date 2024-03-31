@@ -82,7 +82,6 @@ func _version_to_number(version: String) -> int:
 	return version.replace(".", "").to_int()
 
 func _connect_signals():
-	print("connecting")
 	pressed.connect(_on_pressed)
 	http_request.request_completed.connect(_on_http_request_request_completed)
 	download_update_panel.failed.connect(_on_download_update_failed)

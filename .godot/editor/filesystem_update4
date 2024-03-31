@@ -1,7 +1,1 @@
-res://addons/awesome_scene_manager/editor/update_button.tscn
 res://addons/awesome_scene_manager/editor/update_button.gd
-res://playground.tscn
-res://scenes/scene2.tscn
-res://addons/awesome_scene_manager/autoloads/SceneManager.tscn
-res://addons/awesome_scene_manager/editor/download_update.tscn
-res://file_dialog.tscn
