@@ -1,7 +1,6 @@
 # Awesome-Scene-Manager
 
 ![the plugin icon](/plugin_icon.png)
-<br>
 An **addon for Godot 4.2** that handles the transition between two scenes.
 
 ## Features
@@ -9,13 +8,13 @@ An **addon for Godot 4.2** that handles the transition between two scenes.
 * Background loading for the scene you want to change.
 * Easy tracking of the currently loading resource.
 * Easy to customize and add animations for transitioning in and out of the scenes, see [animated transitions](#using-animations).
-* Adding a scene nested inside a tree? Want to keep your hud in place? I got you covered with[swap_scenes](#swapping-the-scene).
+* Adding a scene nested inside a tree? Want to keep your hud in place? I got you covered with [swap_scenes](#swapping-the-scene).
 
 ## Installation
 
 Go to asset tab in your project and search for `Awesome Scene Manager` and install from there.
 
-You can also get the same files from ![insert the godot assets store link here](insert the godot assets store link here).
+You can also get the same files from [GodotAssetStore](https://godotengine.org/asset-library/asset/2820)
 
 ### Or
 
@@ -83,8 +82,10 @@ Lets add a swipe animation, it would swipe from **left to right** when it starts
 
 Theres a `ControlNode` with an `ColorRect` already, lets use that.
 
-Make two animations, one called `swipe_in` and other called `swipe_out`, then go to the script of the `SceneManager` in `res://addons/awesome_scene_manager/autoloads/SceneManager.gd` and add a new value to the `Transitions` **enum**erator called **swipe**;
-> the animations name _**must be lowercase**_
+* Make two animations, one called `swipe_in` and other called `swipe_out`.
+* then go to the script of the `SceneManager` in `res://addons/awesome_scene_manager/autoloads/SceneManager.gd` and
+  * add a new value to the `Transitions` **enum**erator called **swipe**
+    > the animations name _**must be lowercase**_
 
 The addon will add the "_in" and "_out" automatically when needed so the value should be **the name without the _in or _out**.
 
