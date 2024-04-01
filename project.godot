@@ -18,7 +18,7 @@ instance_dock/preview_resolution=Vector2i(64, 64)
 config/name="Scene Manager"
 run/main_scene="res://playground.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
-config/icon="res://addons/awesome_scene_manager/plugin_icon.png"
+config/icon="res://addons/awesome_scene_manager/plugin_icon_50x50.png"
 
 [autoload]
 
