@@ -30,7 +30,7 @@ signal scene_changed
 ## Emitted every frame the resource is being loaded
 signal loading_scene(
 	## An array with a float from 0 to 1
-	progress: Array[float]
+	progress: float
 	)
 ## Emitted when the loading has ended
 signal scene_loaded
@@ -45,7 +45,7 @@ func _process(_delta: float):
 
 	match thread_status:
 		ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-			loading_scene.emit(progress)
+			loading_scene.emit(progress[0])
 
 		ResourceLoader.THREAD_LOAD_LOADED:
 			scene_loaded.emit()
@@ -84,9 +84,7 @@ func change_scene(
 
 	# if we do not want a transition we do no wait for it
 	if trans_in != Transitions.NONE:
-		print("start waiting")
 		await start_transition(trans_in)
-		print("end waiting")
 
 	# we start to load the scene
 	ResourceLoader.load_threaded_request(scene_to_load)

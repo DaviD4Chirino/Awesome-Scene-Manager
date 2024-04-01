@@ -36,7 +36,7 @@ func _on_http_request_request_completed(result: int, response_code: int, headers
 
 	var current_version: String = _get_version()
 	if current_version == null:
-		push_error("Cannot find the current %s..." % addon_title)
+		push_error("Cannot find the current version of %s..." % addon_title)
 		return
 
 	var response = JSON.parse_string(body.get_string_from_utf8())
@@ -79,8 +79,14 @@ func _get_version() -> String:
 	config.load(LOCAL_CONFIG_PATH)
 	return config.get_value("plugin", "version")
 
+## Follow semantic versioning OR DIE (https://semver.org)
 func _version_to_number(version: String) -> int:
-	return version.replace(".", "").to_int()
+	var bits = version.split(".")
+	if bits.size() < 2 or bits.size() > 2:
+		push_error("Invalid version tag, follow semantic versioning OR DIE (https://semver.org)")
+		return 999999999999
+		
+	return bits[0].to_int() * 1000000 + bits[1].to_int() * 1000 + bits[2].to_int()
 
 func _connect_signals():
 	pressed.connect(_on_pressed)
