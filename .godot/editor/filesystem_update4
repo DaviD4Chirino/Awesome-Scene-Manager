@@ -1,3 +1,2 @@
-res://addons/awesome_scene_manager/editor/update_button.tscn
+res://addons/awesome_scene_manager/autoloads/SceneManager.gd
 res://addons/awesome_scene_manager/editor/update_button.gd
-res://addons/awesome_scene_manager/plugin.cfg

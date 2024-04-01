@@ -82,10 +82,6 @@ func _get_version() -> String:
 ## Follow semantic versioning OR DIE (https://semver.org)
 func _version_to_number(version: String) -> int:
 	var bits = version.split(".")
-	if bits.size() < 2 or bits.size() > 2:
-		push_error("Invalid version tag, follow semantic versioning OR DIE (https://semver.org)")
-		return 999999999999
-		
 	return bits[0].to_int() * 1000000 + bits[1].to_int() * 1000 + bits[2].to_int()
 
 func _connect_signals():
