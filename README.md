@@ -1,6 +1,6 @@
 # Awesome-Scene-Manager
 
-![the plugin icon](addons/awesome_scene_manager/plugin_icon.png)
+![the plugin icon](/plugin_icon.png)
 <br>
 An **addon for Godot 4.2** that handles the transition between two scenes.
 
