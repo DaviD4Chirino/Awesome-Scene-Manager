@@ -41,7 +41,6 @@ func _ready():
 func _process(_delta: float):
 	if not loading_resource:
 		return
-
 	var thread_status = ResourceLoader.load_threaded_get_status(scene_to_load, progress)
 
 	match thread_status:
@@ -64,10 +63,10 @@ func change_scene(
 	## The path to the scene you want to transition into
 	scene_path: String,
 	## The initial transition type
-	trans_in: Transitions=Transitions.FADE,
+	trans_in: Transitions=Transitions.NONE,
 	## The ending transition type, if set to -1 will be the the ending of the fade_in transition, otherwise use the Transitions 
 	trans_out: int=- 1,
-	) -> void:
+) -> void:
 
 	if anim.is_playing():
 		push_warning("Animation is already playing")
@@ -83,13 +82,15 @@ func change_scene(
 
 	scene_to_load = scene_path
 
+	# if we do not want a transition we do no wait for it
+	if trans_in != Transitions.NONE:
+		print("start waiting")
+		await start_transition(trans_in)
+		print("end waiting")
+
 	# we start to load the scene
 	ResourceLoader.load_threaded_request(scene_to_load)
 	loading_resource = true
-
-	# if we do not want a transition we do no wait for it
-	if trans_in != Transitions.NONE:
-		await start_transition(trans_in)
 
 	# we change the scene after it loads
 	await scene_loaded
@@ -106,13 +107,69 @@ func change_scene(
 	# after the whole process is done, we return to the initial position
 	hide()
 
+## replaces the [param scene_to_swap] with the scene passed in the [param scene_path]
+func swap_scenes(
+	## The path to the scene you want to change into
+	scene_path: String,
+	scene_to_swap: Node,
+	trans_in: Transitions=Transitions.NONE,
+	## The ending transition type, if set to -1 will be the the ending of the trans_in transition, otherwise use the Transitions 
+	trans_out: int=- 1,
+
+):
+	if anim.is_playing():
+		push_warning("Animation is already playing")
+		return
+
+	show()
+	# if trans_out is -1 it means is the ending of trans_in,
+	# so we give it the same type
+	var out_transition: Transitions = trans_in if (
+		trans_out == - 1) else (
+			Transitions.values()[trans_out]
+		)
+
+	scene_to_load = scene_path
+
+	if trans_in != Transitions.NONE:
+		await start_transition(trans_in)
+
+	# we start to load the scene
+	ResourceLoader.load_threaded_request(scene_to_load)
+	loading_resource = true
+
+	# we change the scene after it loads
+	await scene_loaded
+	
+	var scene_parent: Node = scene_to_swap.get_parent()
+	# We store the scene position to add the new node to that exact position
+	var scene_position: int = scene_to_swap.get_index()
+	var new_scene = ResourceLoader.load_threaded_get(
+			scene_to_load
+		).instantiate()
+
+	scene_parent.add_child(
+		new_scene
+	)
+	scene_parent.move_child(
+		new_scene,
+		scene_position
+	)
+	#after all is done we delete the old scene, you may add a call deferred if you want
+	scene_to_swap.queue_free()
+
+	if out_transition != Transitions.NONE:
+		await end_transition(out_transition)
+
+	hide()
+
+#
 func start_transition(transition: Transitions) -> void:
 	var anim_name: String = _get_anim_name(transition) + "_in"
 
 	if not anim.has_animation(anim_name):
 		push_warning("Theres no animation: %s" % anim_name)
 		anim_name = _parse_transition_name(default_transition_type) + "_in"
-
 	anim.play(anim_name)
 	transitioning_in.emit()
 

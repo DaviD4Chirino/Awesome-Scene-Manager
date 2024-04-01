@@ -2,6 +2,7 @@
 extends Button
 ## Base code by Nathan Hoad (https://github.com/nathanhoad)
 ## at https://github.com/nathanhoad/godot_dialogue_manager
+## This rendition was also based on BenjaTK (https://github.com/BenjaTK/Gaea)
 
 ## The github repo like so:
 ## https://api.github.com/repos/{{USER_NAME}}/{{REPO_NAME}}/releases

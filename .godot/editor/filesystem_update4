@@ -1,1 +1,11 @@
+res://addons/awesome_scene_manager/autoloads/SceneManager.gd
+res://playground.gd
+res://playground.tscn
+res://scenes/level.tscn
+res://scenes/scene2.tscn
+res://scenes/level_2.tscn
+res://addons/awesome_scene_manager/autoloads/SceneManager.tscn
+res://addons/awesome_scene_manager/editor/download_update.tscn
+res://scenes/level_2.gd
+res://scenes/level.gd
 res://addons/awesome_scene_manager/editor/update_button.gd

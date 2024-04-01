@@ -18,7 +18,7 @@ instance_dock/preview_resolution=Vector2i(64, 64)
 config/name="Scene Manager"
 run/main_scene="res://playground.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://addons/awesome_scene_manager/plugin_icon.png"
 
 [autoload]
 
@@ -37,6 +37,14 @@ project/assembly_name="Scene Manager"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/InstanceDock/plugin.cfg", "res://addons/awesome_scene_manager/plugin.cfg", "res://addons/nv.file_system/plugin.cfg")
+
+[input]
+
+a={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":65,"key_label":0,"unicode":97,"echo":false,"script":null)
+]
+}
 
 [rendering]
 
